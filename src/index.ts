@@ -3,6 +3,7 @@ import express from 'express';
 import rootRouter from './routes/route';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './docs/swagger';
+import parkingRouter from './routes/route';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+app.use('/api/parking', parkingRouter);
 
 app.get('/', rootRouter);
 
