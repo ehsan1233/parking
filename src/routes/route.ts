@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { getRoot } from '../controllers/controller';
-import { reportFreeSpot } from '../controllers/parkingController';
+import { getRoot } from '../application/controller/controller';
+import { reportFreeSpot } from '../application/controller/parkingController';
 
 const router = Router();
 
