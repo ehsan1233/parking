@@ -27,4 +27,4 @@ pnpm-lock.yaml.*
 # misc
 .DS_Store
 
-/src/generated/prisma
+/src/infrastructure/database/generated/prisma

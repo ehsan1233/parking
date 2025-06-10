@@ -12,6 +12,9 @@
     "lint": "eslint 'src/**/*.{ts,js}'",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
   },
+  "prisma": {
+    "schema": "src/infrastructure/database/prisma/schema.prisma"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
