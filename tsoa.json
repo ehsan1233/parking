@@ -1,0 +1,19 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/application/controller/**/*.ts"],
+  "spec": {
+    "outputDirectory": "./src/spec",
+    "specVersion": 3
+  },
+  "routes": {
+    "routesDir": "./src/routes",
+    "middleware": "express",
+    "esm": true
+  },
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  }
+}
