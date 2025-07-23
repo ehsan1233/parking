@@ -10,12 +10,6 @@ export class ParkingSpotService {
     @inject(NearbyFreeSpot) private nearbyFreeSpot: NearbyFreeSpot
   ) {}
 
-  /**
-   * Find nearby free parking spots
-   * @param latitude The latitude coordinate
-   * @param longitude The longitude coordinate
-   * @returns Promise with array of parking spot responses
-   */
   public async findNearbyFreeSpots(
     latitude: number,
     longitude: number
@@ -23,12 +17,11 @@ export class ParkingSpotService {
     return this.nearbyFreeSpot.finder(latitude, longitude);
   }
 
-  /**
-   * Create a new free parking spot
-   * @param spot The parking spot data
-   * @returns Promise with the created parking spot response
-   */
   public async createFreeSpot(spot: ParkingSpot): Promise<ParkingSpotResponse> {
     return this.repository.createFreeSpot(spot);
+  }
+
+  public async takeFreeSpot(spotId: string): Promise<ParkingSpotResponse> {
+    return this.repository.takeFreeSpot(spotId);
   }
 }

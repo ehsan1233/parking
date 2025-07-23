@@ -6,12 +6,6 @@ import { IParkingSpotRepository } from '~/domain/repositories/IParkingSpotReposi
 
 @injectable()
 export class SupabaseParkingSpotRepository implements IParkingSpotRepository {
-  /**
-   * Find nearby free parking spots within a radius of the given coordinates
-   * @param latitude The latitude coordinate
-   * @param longitude The longitude coordinate
-   * @returns Promise with array of parking spot responses
-   */
   async findNearbyFreeSpots(latitude: number, longitude: number): Promise<ParkingSpotResponse[]> {
     // Earth radius in meters
     const R = 6371000;
@@ -28,6 +22,7 @@ export class SupabaseParkingSpotRepository implements IParkingSpotRepository {
     const { data, error } = await supabase
       .from('FreeSpots')
       .select()
+      .eq('is_free', true)
       .gte('latitude', minLat)
       .lte('latitude', maxLat)
       .gte('longitude', minLon)
@@ -41,11 +36,6 @@ export class SupabaseParkingSpotRepository implements IParkingSpotRepository {
     return data as ParkingSpotResponse[];
   }
 
-  /**
-   * Create a new free parking spot
-   * @param spot The parking spot data
-   * @returns Promise with the created parking spot response
-   */
   async createFreeSpot(spot: ParkingSpot): Promise<ParkingSpotResponse> {
     const { latitude, longitude } = spot;
 
@@ -58,6 +48,26 @@ export class SupabaseParkingSpotRepository implements IParkingSpotRepository {
     if (error) {
       console.error('Insert error:', JSON.stringify(error, null, 2));
       throw new Error(error.message);
+    }
+
+    return data as ParkingSpotResponse;
+  }
+
+  async takeFreeSpot(spotId: string): Promise<ParkingSpotResponse> {
+    const { data, error } = await supabase
+      .from('FreeSpots')
+      .update({ is_free: false })
+      .eq('id', spotId)
+      .eq('is_free', true)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to take spot: ${error.message}`);
+    }
+
+    if (!data) {
+      throw new Error(`Parking spot with id ${spotId} is already taken or does not exist.`);
     }
 
     return data as ParkingSpotResponse;

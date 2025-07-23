@@ -8,4 +8,5 @@ export interface ParkingSpotResponse {
   latitude: number;
   longitude: number;
   createdAt: string;
+  isFree: boolean;
 }

@@ -21,6 +21,7 @@ const models: TsoaRoute.Models = {
             "latitude": {"dataType":"double","required":true},
             "longitude": {"dataType":"double","required":true},
             "createdAt": {"dataType":"string","required":true},
+            "isFree": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
     },
@@ -111,6 +112,41 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getNearbySpots',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsParkingSpotController_takeSpot: Record<string, TsoaRoute.ParameterSchema> = {
+                body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"dataType":"string","required":true}}},
+        };
+        app.patch('/v1/parking/take-spot',
+            ...(fetchMiddlewares<RequestHandler>(ParkingSpotController)),
+            ...(fetchMiddlewares<RequestHandler>(ParkingSpotController.prototype.takeSpot)),
+
+            async function ParkingSpotController_takeSpot(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsParkingSpotController_takeSpot, request, response });
+
+                const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
+
+                const controller: any = await container.get<ParkingSpotController>(ParkingSpotController);
+                if (typeof controller['setStatus'] === 'function') {
+                controller.setStatus(undefined);
+                }
+
+              await templateService.apiHandler({
+                methodName: 'takeSpot',
                 controller,
                 response,
                 next,
