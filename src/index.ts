@@ -17,3 +17,11 @@ app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
   console.log(`Swagger docs at http://localhost:${PORT}/api-docs`);
 });
+
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('❌ Uncaught error:', err);
+  res.status(500).json({
+    message: err?.message || 'Unknown error',
+    stack: process.env.NODE_ENV === 'production' ? undefined : err?.stack,
+  });
+});
