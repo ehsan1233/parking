@@ -1,34 +1,36 @@
-import { ulid } from 'ulid';
+import { injectable } from 'tsyringe';
 import { ParkingSpot, ParkingSpotResponse } from '~/domain/entities/ParkingSpot';
-import { Controller, Post, Route, Body, Get, Query } from 'tsoa';
-import { ParkingSpotService } from '../service/ParkingSpotService';
-import { supabase } from '~/lib/supabase';
+import { Post, Route, Get, Query } from 'tsoa';
+import { Body, Controller } from '@tsoa/runtime';
 
+import { ParkingSpotService } from '../service/ParkingSpotService';
+
+@injectable()
 @Route('v1/parking')
 export class ParkingSpotController extends Controller {
-  @Post('spots')
-  public async reportFreeSpot(@Body() body: ParkingSpot): Promise<ParkingSpotResponse> {
-    const { latitude, longitude } = body;
-
-    const { data, error } = await supabase
-      .from('FreeSpots')
-      .insert([{ id: ulid(), latitude, longitude }])
-      .select()
-      .single();
-
-    if (error) {
-      console.error('insert error:', JSON.stringify(error, null, 2));
-      throw new Error(error.message);
-    }
-
-    return data as ParkingSpotResponse;
+  constructor(private parkingSpotService: ParkingSpotService) {
+    super();
   }
 
+  /**
+   * Report a new free parking spot
+   */
+  @Post('spots')
+  public async reportFreeSpot(@Body() body: ParkingSpot): Promise<ParkingSpotResponse> {
+    return this.parkingSpotService.createFreeSpot(body);
+  }
+
+  /**
+   * Get nearby free parking spots
+   * @param latitude The latitude coordinate
+   * @param longitude The longitude coordinate
+   * @returns Array of nearby free parking spots
+   */
   @Get('free-spots')
   public async getNearbySpots(
     @Query() latitude: number,
     @Query() longitude: number
   ): Promise<ParkingSpotResponse[]> {
-    return ParkingSpotService.findNearbyFreeSpot(latitude, longitude);
+    return this.parkingSpotService.findNearbyFreeSpots(latitude, longitude);
   }
 }

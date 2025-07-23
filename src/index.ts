@@ -1,8 +1,11 @@
 import 'dotenv/config';
+import 'reflect-metadata';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { RegisterRoutes } from './routes/routes';
 import * as swaggerDocument from './spec/swagger.json';
+// Import IoC container to ensure it's initialized
+import './ioc/container';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

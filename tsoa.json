@@ -9,7 +9,9 @@
   "routes": {
     "routesDir": "./src/routes",
     "middleware": "express",
-    "esm": true
+    "esm": true,
+    "iocModule": "./src/ioc/container",
+    "controllerFactory": "iocContainer"
   },
   "compilerOptions": {
     "paths": {
