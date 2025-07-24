@@ -4,11 +4,17 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { RegisterRoutes } from './routes/routes';
 import * as swaggerDocument from './spec/swagger.json';
-// Import IoC container to ensure it's initialized
+import cors from 'cors';
 import './ioc/container';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+  })
+);
 
 app.use(express.json());
 
